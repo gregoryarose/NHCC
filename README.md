@@ -1,5 +1,9 @@
 # NHCC
+
+# Developer: Gregory Rose (Gregory.rose@optusnet.com.au)
+
 NHCC Rider and Grading database
+
 Steps to use:
 
 Windows:
