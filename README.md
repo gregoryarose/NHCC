@@ -6,23 +6,24 @@ NHCC Rider and Grading database
 
 Steps to use:
 
+
 Windows:
 
-If not already installed, install python:
+from command promt
+> git clone https://github.com/gregoryarose/NHCC.git
 
-	[from command prompt] >	pip3 install python3
+
+If not already installed, install python:
+> pip3 install python3
+> pip3 install Jinja2
+> cd NHCC
+> pip3 install -r requirements.txt 
 
 set up cosmos-sdk:
 
-    git clone https://github.com/jixjia/cosmos-sdk.git - (more info if needed at https://github.com/jixjia/cosmos-sdk)
+from windows file explorer navigate to NHCC folder 
 
-
-    pip3 install -r requirements.txt (if not found, make sure you are in the directory that contains the cosmos-sdk folder)
-	pip3 install Jinja2
-
-Add your Cosmos DB Endpoint and Primary Key to the cosmosdb_credential.py file (get these from Greg Rose)
-
-
+Add your Cosmos DB Endpoint and Primary Key to the cosmosdb_credential.py file (contact Greg Rose for the keys)
 
 ON MAC:
 
