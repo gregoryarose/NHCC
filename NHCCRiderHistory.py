@@ -16,7 +16,7 @@ import os
 root=tk.Tk()
  
 # setting the windows size
-root.geometry("800x900")
+root.geometry("900x900")
 root['background']='#B9D687'
 root.title("NHCC") 
 
@@ -24,10 +24,22 @@ root.title("NHCC")
 
 my_menu=Menu(root)
 root.config(menu=my_menu)
- 
-def our_command():
+
+def GS_command():
+    #clear_text()
+    txt.delete("1.0", "end")
+    strGrade = GetRiderHist.GetGrades()
+    txt.insert("1.0",strGrade.to_string(index=False))
     #my_label = Label(root, text="Clicked!!").pack()
-    showinfo(title="Information", message="Hello World!")
+    #showinfo(title="Information", message="Hello World!")
+    
+def Top_Points_command():
+    #clear_text()
+    txt.delete("1.0", "end")
+    strpoints = GetRiderHist.GetTopPoints()
+    txt.insert("1.0",strpoints.to_string(index=False))
+    
+    
 
 def about_command():
     openAboutWindow()
@@ -39,12 +51,14 @@ def instruction_command():
 
  
 file_menu= Menu(my_menu)
-#my_menu.add_cascade(label="File", menu=file_menu)
-#file_menu.add_command(label="New...",command=our_command)
+my_menu.add_cascade(label="File", menu=file_menu)
+file_menu.add_command(label="Show Grade Sheet",command=GS_command)
 #file_menu.add_separator()
-#file_menu.add_command(label="Exit",command=root.quit)
- 
+file_menu.add_command(label="Show Top Rider Points",command=Top_Points_command)
+file_menu.add_command(label="Exit",command=root.quit)
 
+
+Top_Points_command
     
 option_menu = Menu(my_menu)
 my_menu.add_cascade(label="Help",menu=option_menu)
@@ -214,7 +228,7 @@ frame = tk.Frame(root)
 frame['background']='#B9D687'
 
 # Create a Label widget
-tk.Label(frame, text="Newcastle Hunter Cycling Club Rider Points and History Tool", font=('Helvetica 16 bold'), background='#E3F0CE').grid(row=5, column=0, pady=30)
+tk.Label(frame, text="Newcastle Hunter Cycling Club Grading Info Tool", font=('Helvetica 16 bold'), background='#E3F0CE').grid(row=5, column=0, pady=30)
 frame.pack()
 
   
@@ -245,7 +259,7 @@ heading_label = tk.Label(root, text = 'Newcastle Hunter Cycling Club Rider point
 #name_entry = tk.Entry(root,textvariable = name_var, font=('calibre',10,'normal'))
 
 # Add Field for License
-tk.Label(frame, font=('Helvetica 14'),text="Enter License:").grid(row=7, column=0, padx=5, pady=10)
+#tk.Label(frame, font=('Helvetica 14'),text="Enter License:").grid(row=7, column=0, padx=5, pady=10)
 fname = tk.Entry(frame,textvariable = name_var,font=('Helvetica 14'))
 fname.grid(row=10, column=0, padx=10)
 
@@ -254,7 +268,9 @@ tk.Button(frame, text="Submit", command=submit, font=('Helvetica 14')).grid(row=
 
 # a button widget which will open a
 # new window on button click
-tk.Button(frame, text ="Lookup License", command = openNewWindow, font=('Helvetica 14')).grid(row=7,column=1, padx=5, pady=10)
+tk.Button(frame, text ="Rider History", command = openNewWindow, font=('Helvetica 14')).grid(row=7,column=1, padx=5, pady=10)
+tk.Button(frame, text ="Grade Sheet", command = GS_command, font=('Helvetica 14')).grid(row=8,column=1, padx=5, pady=10)
+tk.Button(frame, text ="High Points", command = Top_Points_command, font=('Helvetica 14')).grid(row=9,column=1, padx=5, pady=10)
   
 # placing the label and entry in
 # the required position using grid

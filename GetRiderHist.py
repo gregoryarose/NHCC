@@ -18,36 +18,26 @@ def GetHist(License):
     print(query)
     try:
         results = dbConnection.query_item(query)
-        
+        df = pd.DataFrame(results, columns=None)
+        RiderName = df.at[0, "FirstName"] + " " + df.at[0, "Surname"] + " - Current Grade: " + df.at[0, "Grade"]
+        #Get rid of nulls'
+        df2 = df.replace(np.nan, "")
     except Exception as e:
         print(str(e))
-    df = pd.DataFrame(results, columns=None)
-    
-    RiderName = df.at[0, "FirstName"] + " " + df.at[0, "Surname"] + " - Current Grade: " + df.at[0, "Grade"]
-    
-    #Get rid of nulls'
-    df2 = df.replace(np.nan, "")
-   
-    #print(df2)
 
-    #df2.RaceResult = [place[item] for item in df2.RaceResult]
-    #df2.RacePoints = [point[item] for item in df2.RacePoints]
    
     #sort by race date descending
     sorted_df = df2.sort_values(by='RaceDate', ascending=False)
     left_aligned_df = df.style.set_properties(**{'text-align': 'left'})
     
     query2 = 'SELECT VALUE root FROM (SELECT sum(t.RacePoints) as Active_Points FROM c JOIN t IN c.RaceEntry WHERE  t.RaceGrade <= c.Grade  and DateTimeDiff("day", t.RaceDate, GetCurrentDateTime ()) <= 269 and c.License = ' + str(License)+ ' )as root ' 
-    print(query2)
-    results2 = dbConnection.query_item(query2)
-    df3 = pd.DataFrame(results2, columns=None)
-    #dfAlign = sorted_df.style.set_properties(**{'text-align': 'left'})
-    
-    
-    selection = sorted_df[['RaceGrade', 'RaceDate', 'RaceResult','Points']]
-    #selection = selection.style.set_properties(**{'text-align': 'left'})
-    
-    NewLine = '\n'
+    #print(query2)
+    try:
+        results2 = dbConnection.query_item(query2)
+        df3 = pd.DataFrame(results2, columns=None)
+        selection = sorted_df[['RaceGrade', 'RaceDate', 'RaceResult','Points']]
+    except Exception as e:
+        print(str(e))
     
     MyString = "Rider History Report: "  + RiderName +  " \n"
     MyString = MyString +  " \n" + df3.to_string(index=False)
@@ -60,15 +50,16 @@ def GetRider(Nm):
     Surname = Nm.upper()
     query = 'SELECT distinct c.Surname,c.FirstName,c.Club, CONCAT("#", tostring(c.License)) as License FROM c where UPPER(c.Surname) like "' + Surname +'%"'
     #print(query)
-    results = dbConnection.query_item(query)
-        
-    df = pd.DataFrame(results, columns=None)
-    dflist = df.values.tolist()
-    
-    #MyString = df.to_string(index=False)
-    #print(df)
+    try:
+        results = dbConnection.query_item(query)       
+        df = pd.DataFrame(results, columns=None)
+        dflist = df.values.tolist()
+    except Exception as e:
+        print(str(e))
+
+
     return df
-    #return dflist  
+  
     
 def GetGrades():
  
@@ -76,11 +67,27 @@ def GetGrades():
     query += 'sum((t.RaceGrade <= c.Grade and DateTimeDiff("day", t.RaceDate, GetCurrentDateTime ()) <= 269)? t.RacePoints:0) as Points FROM c  JOIN t IN c.RaceEntry '
     query += 'Group By c.Grade, c.Surname, c.FirstName,c.club)as root ' 
     
-    #print(query)
-    results = dbConnection.query_item(query)
+    try:
+        results = dbConnection.query_item(query)     
+        df = pd.DataFrame(results, columns=None)
+        sorted_df = df.sort_values(by=['Surname','FirstName'])
+    except Exception as e:
+        print(str(e))   
         
-    df = pd.DataFrame(results, columns=None)
-    sorted_df = df.sort_values(by=['Surname','FirstName'])
     return sorted_df
-    #return df
+
+def GetTopPoints():
+ 
+    query = 'SELECT VALUE root FROM (SELECT c.Grade, c.Surname, c.FirstName,c.club, '
+    query += 'sum((t.RaceGrade <= c.Grade and DateTimeDiff("day", t.RaceDate, GetCurrentDateTime ()) <= 269)? t.RacePoints:0) as Points FROM c  JOIN t IN c.RaceEntry '
+    query += 'Group By c.Grade, c.Surname, c.FirstName,c.club)as root where root.Points >= 8 ' 
+    
+    try:
+        results = dbConnection.query_item(query)     
+        df = pd.DataFrame(results, columns=None)
+        sorted_df = df.sort_values(by=['Grade','Points'],ascending = [True, False])
+    except Exception as e:
+        print(str(e))   
+        
+    return sorted_df
 
