@@ -1,6 +1,6 @@
 # NHCC
 
-# Developer: Gregory Rose (Gregory.rose@optusnet.com.au)
+# Developer: Gregory Rose (gregory.rose@optusnet.com.au)
 
 NHCC Rider and Grading database
 
