@@ -63,14 +63,15 @@ def GetRider(Nm):
     
 def GetGrades():
  
-    query = 'SELECT VALUE root FROM (SELECT c.Grade, c.Surname, c.FirstName,c.club, '
+    query = 'SELECT VALUE root FROM (SELECT c.Grade, UPPER(c.Surname) as Surname, c.FirstName,c.club, '
     query += 'sum((t.RaceGrade <= c.Grade and DateTimeDiff("day", t.RaceDate, GetCurrentDateTime ()) <= 269)? t.RacePoints:0) as Points FROM c  JOIN t IN c.RaceEntry '
     query += 'Group By c.Grade, c.Surname, c.FirstName,c.club)as root ' 
     
     try:
         results = dbConnection.query_item(query)     
         df = pd.DataFrame(results, columns=None)
-        sorted_df = df.sort_values(by=['Surname','FirstName'])
+        sorted_df = df.sort_values(by=['Surname','FirstName'],ignore_index=True)
+        
     except Exception as e:
         print(str(e))   
         

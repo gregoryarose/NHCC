@@ -1,2 +1,5 @@
 azure-cosmos==3.1.1
 colorama==0.3.9
+numpy==1.22.1
+pandas==1.4.0
+Jinja2==3.0.3
