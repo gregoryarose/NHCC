@@ -93,7 +93,7 @@ def GetTopPoints():
     return sorted_df
     
 def GetRace():
-    query = 'SELECT VALUE root FROM (SELECT distinct t.RaceDate, CONCAT("#",ToString(t.RaceID)) as RaceID FROM c JOIN t IN c.RaceEntry )as root   ' 
+    query = 'SELECT VALUE root FROM (SELECT distinct t.RaceDate,t.RaceType,t.RaceVenue, CONCAT("#",ToString(t.RaceID)) as RaceID FROM c JOIN t IN c.RaceEntry )as root   ' 
     
     try:
         results = dbConnection.query_item(query)     
