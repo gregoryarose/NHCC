@@ -72,13 +72,19 @@ from terminal:
 ********************************************************************************
 
 
-Run the proram:
+Run the programme:
 
-There is a shortcut in the NHCC folder "NHCC Rider Grading"
+For Windows, there is a shortcut in the NHCC folder "NHCC Rider Grading"
 
-this may not correctly point to your installation.  If it doesn't you can run manually from the command promt (or terminal on mac)
+Double click this  - it may not correctly point to your installation.  If it doesn't you can run manually from the command prompt 
+C:\Users\grego> cd NHCC
 
-C:\Users\grego\NHCC> python3 NHCCRiderHistory.py
+C:\Users\grego\NHCC> python3 NHCCRiderHistory.py. (substitute "grego" with your home directory name)
 
 
+For Mac, double click NHCC.sh - again if the link fails use "Terminal" as follows:
+
+gregoryrose@Gregorys-Air % cd nhcc
+
+gregoryrose@Gregorys-Air nhcc % python3 NHCCRiderHistory.py
 
