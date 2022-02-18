@@ -91,4 +91,36 @@ def GetTopPoints():
         print(str(e))   
         
     return sorted_df
+    
+def GetRace():
+    query = 'SELECT VALUE root FROM (SELECT distinct t.RaceDate, CONCAT("#",ToString(t.RaceID)) as RaceID FROM c JOIN t IN c.RaceEntry )as root   ' 
+    
+    try:
+        results = dbConnection.query_item(query)     
+        df = pd.DataFrame(results, columns=None)
+        sorted_df = df.sort_values(by='RaceDate',ascending = False,ignore_index=True)
+        
+    except Exception as e:
+        print(str(e))   
+        
+    return sorted_df
+    
+def GetRaceResults(RID):
+ 
+    query = 'SELECT VALUE root FROM (SELECT distinct t.RaceGrade, t.RaceResult, c.FirstName, c.Surname ,SUBSTRING(c.Club,0,8) as Club FROM c  '
+    query += 'JOIN t IN c.RaceEntry where LENGTH(t.RaceResult) > 0 and t.RaceID = ' + RID +' )as root   ' 
+    
+    try:
+        results = dbConnection.query_item(query)     
+        df = pd.DataFrame(results, columns=None)
+        #print(df)
+        sorted_df = df.sort_values(by=['RaceGrade','RaceResult'],ascending = [True, True],ignore_index=True)
+        #sorted_df = df.sort_values(by=['RaceGrade','RaceResult'],ascending = [True, True])
+        sorted_df.set_index('RaceGrade', inplace=True)
+    except Exception as e:
+        print(str(e))   
+        
+    return sorted_df    
 
+
+ 

@@ -23,7 +23,7 @@ p1 = tk.PhotoImage(file = 'NHCC.png')
   
 # Setting icon of master window
 root.iconphoto(False, p1)
-  
+root.grid_columnconfigure(0, weight=1)  
 
 #Set up Menu
 my_menu=Menu(root)
@@ -32,6 +32,9 @@ root.config(menu=my_menu)
 #Declaring string variable for storing License number
 global Lic_var
 Lic_var=tk.StringVar()
+
+global RD_var
+RD_var=tk.StringVar()
 
 def GS_command():
     #clear_text()
@@ -54,6 +57,9 @@ def about_command():
     
 def instruction_command():
     openInstructionsWindow()
+    
+def Race_Result_command():
+    openNewWindowRace()
     
     
 #Comfigure menu
@@ -99,7 +105,7 @@ def openNewWindow():
     
     # Add Field for Name
     Label(ws, font=('Helvetica 14'),text="Enter Surname:").pack(pady=10)
-    Sname = Entry(ws,textvariable = Sname_var,font=('Helvetica 14')).pack(pady=10)
+    RDate = Entry(ws,textvariable = Sname_var,font=('Helvetica 14')).pack(pady=10)
       
     SelectedLicense = '99999999'
     lb = tk.Listbox(ws,width = 70)
@@ -179,6 +185,102 @@ def openNewWindow():
 
 #################################################################################
 
+
+##########################################################################################
+# function to open a new window to look up race results
+
+def openNewWindowRace():
+     
+    # Toplevel object which will
+    # be treated as a new window
+    ws = tk.Toplevel(root)
+ 
+    # sets the title of the
+    # Toplevel widget
+    ws.title("NHCC")
+    p1 = tk.PhotoImage(file = 'NHCC.png')
+  
+    # Setting icon of master window
+    ws.iconphoto(False, p1)
+ 
+    # sets the geometry of toplevel
+    ws.geometry("500x500")
+ 
+    ws.config(bg='#CAEEBE')
+    
+    # Variable for storing name 
+    RDate_var=tk.StringVar()
+ 
+    # Create a Label widget
+    Label(ws, text="Race Result Lookup", font=('Helvetica 16 bold'), background='#E3F0CE').pack(pady=20)
+    
+      
+    SelectedRace = '99999999'
+    rd = tk.Listbox(ws,width = 70)
+
+    
+
+    def showSelected():
+      try:
+        global RD_var
+        txt.delete("1.0", "end")
+        RID = extractRace()
+        RD_var= splitIDOut(RID)
+        strRace = GetRiderHist.GetRaceResults(RD_var)
+        txt.insert("1.0",strRace)
+        ws.destroy()
+      except AttributeError:
+        showinfo(title="Information", message="Please try again - choose a race")
+        ws.focus_set()
+      except Exception as e:
+        showinfo(title="Information", message=str(e))   
+        ws.focus_set()  
+          
+    def fillRaceList():
+  
+          try:
+            rd.delete(0,'end')             
+            lst = GetRiderHist.GetRace()     
+            #lb = tk.Listbox(ws,width = 70)
+            rd.pack(expand=True)
+            
+            for index, row in lst.iterrows():
+                s = lst.iloc[index,:].to_string(header=False, index=False)
+                s = s.replace('\n',"  ")
+                s = s.strip()
+                rd.insert(index, s)
+            rd.select_set(0)
+            
+          except Exception as e:
+            print(str(e))
+            showinfo(title="Information", message=str(e))
+            
+
+
+    def extractRace():
+        for i in rd.curselection():
+           x=rd.get(i)
+           return x   
+        
+    
+
+    def addToClipBoard(text):
+       command = 'echo ' + text.strip() + '| clip'
+       os.system(command)
+       
+    def splitIDOut(LS):
+       LStart = LS.find("#")+1
+       LEnd = len(LS)
+       y = LS[LStart:LEnd]
+       #print(y)
+       return y    
+     
+    fillRaceList()
+    Button(ws, text='Submit', command=showSelected).pack(pady=20)
+    #Button(ws, text='Find Rider', command=showRider).pack(pady=20)
+    
+
+#################################################################################
 
 def openAboutWindow():
     
@@ -284,21 +386,22 @@ tk.Label(frame, text="Newcastle Hunter Cycling Club Grading Info Tool", font=('H
 
 # a button widget which will open a
 # new window on button click
-tk.Button(frame1, text ="Rider History",  activebackground='#78d6ff', command = openNewWindow, font=('Helvetica 14')).grid(row=0,column=0, padx=5, pady=10)
-tk.Button(frame1, text ="Grade Sheet" , activebackground = "#78d6ff", command = GS_command, font=('Helvetica 14')).grid(row=0,column=1, padx=5, pady=10)
-tk.Button(frame1, text ="High Points", activebackground = "#78d6ff", command = Top_Points_command, font=('Helvetica 14')).grid(row=0,column=2, padx=5, pady=10)
-  
+tk.Button(frame1, text ="Rider History",  width = 15, activebackground='#78d6ff', command = openNewWindow, font=('Helvetica 14')).grid(row=0,column=0, padx=5, pady=10)
+tk.Button(frame1, text ="Grade Sheet" , width = 15, activebackground = "#78d6ff", command = GS_command, font=('Helvetica 14')).grid(row=0,column=1, padx=5, pady=10)
+tk.Button(frame1, text ="High Points", width = 15,activebackground = "#78d6ff", command = Top_Points_command, font=('Helvetica 14')).grid(row=1,column=0, padx=5, pady=10)
+tk.Button(frame1, text ="Race Day Results",width = 15, activebackground = "#78d6ff", command = Race_Result_command, font=('Helvetica 14')).grid(row=1,column=1, padx=5, pady=10)  
 
 txt= tk.Text(frame2, height=41, width=60) 
 # Attach the scrollbar with the text widget
 
 # Add a Scrollbar(horizontal)
 v=tk.Scrollbar(frame2,  orient='vertical')
-v.grid(row=3,column=1,sticky='NS')
+v.grid(row=3,column=2,sticky='NS')
 v.config(command=txt.yview)
-txt.grid(row=3,column=0)
-
+txt.grid(row=3,column=0 ,columnspan=2, sticky='w'+'e')
 
 
 root.mainloop()
+
+
 
