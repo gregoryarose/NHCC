@@ -204,7 +204,7 @@ def openNewWindowRace():
     ws.iconphoto(False, p1)
  
     # sets the geometry of toplevel
-    ws.geometry("500x500")
+    ws.geometry("500x450")
  
     ws.config(bg='#CAEEBE')
     
@@ -212,11 +212,14 @@ def openNewWindowRace():
     RDate_var=tk.StringVar()
  
     # Create a Label widget
-    Label(ws, text="Race Result Lookup", font=('Helvetica 16 bold'), background='#E3F0CE').pack(pady=20)
+    Label(ws, text="Race Result Lookup", font=('Helvetica 16 bold'), background='#E3F0CE').grid(row=0,column=1,pady=20 )
     
       
     SelectedRace = '99999999'
     rd = tk.Listbox(ws,width = 70)
+    # Add a Scrollbar(horizontal)
+    v=tk.Scrollbar(ws,  orient='vertical')
+    v.config(command=rd.yview)
 
     
 
@@ -242,7 +245,8 @@ def openNewWindowRace():
             rd.delete(0,'end')             
             lst = GetRiderHist.GetRace()     
             #lb = tk.Listbox(ws,width = 70)
-            rd.pack(expand=True)
+            rd.grid(row=1,column=0,columnspan=3)
+            v.grid(row=1,column=3,sticky= 'n'+'s')
             
             for index, row in lst.iterrows():
                 s = lst.iloc[index,:].to_string(header=False, index=False)
@@ -276,8 +280,10 @@ def openNewWindowRace():
        return y    
      
     fillRaceList()
-    Button(ws, text='Submit', command=showSelected).pack(pady=20)
-    #Button(ws, text='Find Rider', command=showRider).pack(pady=20)
+
+    Button(ws, text='Submit', command=showSelected).grid(row=2,column=1 , pady=20)
+ 
+    
     
 
 #################################################################################
