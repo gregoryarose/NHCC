@@ -12,7 +12,7 @@ Windows:
 
 If not already installed, install python:
 
-NOTE: WHen the install window comes up, tick the box to add "Add Python 3.10 to PATH"
+NOTE: When the install window comes up, tick the box to add "Add Python 3.10 to PATH"
 	
 	https://www.python.org/ftp/python/3.10.2/python-3.10.2-amd64.exe
 
@@ -22,7 +22,7 @@ If not already installed, install git:
 
 Download NHCC files from GIT:
 
-from command promt
+from command prompt
 > git clone https://github.com/gregoryarose/NHCC.git
 
 Confirm location of NHCC folder, should be C:\users\[your username]\NHCC
