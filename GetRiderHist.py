@@ -103,7 +103,7 @@ def GetRace():
     except Exception as e:
         print(str(e))   
         
-    return sorted_df
+    return sorted_df  
     
 def GetRaceResults(RID):
  
@@ -120,7 +120,7 @@ def GetRaceResults(RID):
     except Exception as e:
         print(str(e))   
         
-    return sorted_df    
+    return sorted_df.to_string(index=False)    
 
 
  
