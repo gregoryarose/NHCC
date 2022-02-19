@@ -120,7 +120,7 @@ def GetRaceResults(RID):
     except Exception as e:
         print(str(e))   
         
-    return sorted_df.to_string(index=False)    
+    return sorted_df   
 
 
  
